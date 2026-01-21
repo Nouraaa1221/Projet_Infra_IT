@@ -66,10 +66,21 @@ def formulaire_client():
 def enregistrer_client():
     nom = request.form['nom']
     prenom = request.form['prenom']
+    
+@app.route('/fiche_nom/<nom>', methods=['GET'])
+def fiche_nom(nom):
+    auth = request.authorization
+    if not auth or auth.username != 'user' or auth.password != '12345':
+        return abort(401)
+    # Code pour rechercher dans database.db le client avec ce nom
+
+    
 
     # Connexion à la base de données
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
+    cursor.execute("SELECT * FROM clients WHERE nom = ?", (nom,))
+
 
     # Exécution de la requête SQL pour insérer un nouveau client
     cursor.execute('INSERT INTO clients (created, nom, prenom, adresse) VALUES (?, ?, ?, ?)', (1002938, nom, prenom, "ICI"))
