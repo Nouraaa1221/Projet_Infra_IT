@@ -69,6 +69,7 @@ def enregistrer_client():
     
 @app.route('/fiche_nom/<nom>', methods=['GET'])
 def fiche_nom(nom):
+    cursor.execute("SELECT * FROM clients WHERE nom = ?", (nom,))
     auth = request.authorization
     if not auth or auth.username != 'user' or auth.password != '12345':
         return abort(401)
@@ -79,7 +80,7 @@ def fiche_nom(nom):
     # Connexion à la base de données
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM clients WHERE nom = ?", (nom,))
+    
 
 
     # Exécution de la requête SQL pour insérer un nouveau client
