@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,7 +13,7 @@
         
         .tache-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; background: #fff; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Style spécial pour les tâches terminées */
+        /* Style spécial pour les tâches terminées  */
         .terminee { background-color: #e9ecef; color: #6c757d; }
         .terminee h3 { text-decoration: line-through; }
 
@@ -26,32 +28,43 @@
 <div class="container">
     <h1>Mes Tâches</h1>
 
-    <a href="{{ url_for('ajouter') }}" class="btn-add">+ Nouvelle Tâche</a>
+    <%-- Lien vers le formulaire d'ajout  --%>
+    <a href="ajouter_tache.jsp" class="btn-add">+ Nouvelle Tâche</a>
 
     <div class="liste-taches">
-        {% for tache in taches %}
-            <div class="tache-card {% if tache['est_terminee'] %}terminee{% endif %}">
+        <%-- Boucle sur la liste des tâches stockées en base de données [cite: 11, 13] --%>
+        <c:forEach var="tache" items="${taches}">
+            <div class="tache-card ${tache.estTerminee ? 'terminee' : ''}">
                 <div class="contenu">
-                    <h3>{{ tache['titre'] }}</h3>
-                    <p>{{ tache['description'] }}</p>
-                    <small>📅 Échéance : {{ tache['date_echeance'] }}</small>
+                    <h3><c:out value="${tache.titre}"/></h3> <%-- Titre [cite: 9] --%>
+                    <p><c:out value="${tache.description}"/></p> <%-- Description [cite: 10] --%>
+                    <small>📅 Échéance : <c:out value="${tache.dateEcheance}"/></small> <%-- Date d'échéance  --%>
                 </div>
 
                 <div class="actions">
-                    {% if not tache['est_terminee'] %}
-                    <form action="{{ url_for('terminer', id=tache['id']) }}" method="post">
-                        <button type="submit" class="btn-check">✓ Terminer</button>
-                    </form>
-                    {% endif %}
+                    <%-- Bouton pour marquer comme terminé  --%>
+                    <c:if test="${!tache.estTerminee}">
+                        <form action="TaskServlet" method="post">
+                            <input type="hidden" name="action" value="terminer">
+                            <input type="hidden" name="id" value="${tache.id}">
+                            <button type="submit" class="btn-check">✓ Terminer</button>
+                        </form>
+                    </c:if>
 
-                    <form action="{{ url_for('supprimer', id=tache['id']) }}" method="post">
+                    <%-- Bouton pour supprimer  --%>
+                    <form action="TaskServlet" method="post">
+                        <input type="hidden" name="action" value="supprimer">
+                        <input type="hidden" name="id" value="${tache.id}">
                         <button type="submit" class="btn-delete" onclick="return confirm('Êtes-vous sûr ?')">🗑 Supprimer</button>
                     </form>
                 </div>
             </div>
-        {% else %}
+        </c:forEach>
+        
+        <%-- Message si aucune tâche n'est présente [cite: 7] --%>
+        <c:if test="${empty taches}">
             <p style="text-align:center">Aucune tâche pour le moment.</p>
-        {% endfor %}
+        </c:if>
     </div>
 </div>
 
