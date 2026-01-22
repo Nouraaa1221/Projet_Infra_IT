@@ -1,7 +1,7 @@
 import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect
 
-app = Flask(name)
+app = Flask(__name__)
 app.config['SECRET_KEY'] = 'votre_cle_secrete_ici'
 
 def get_db_connection():
