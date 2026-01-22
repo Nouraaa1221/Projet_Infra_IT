@@ -16,7 +16,7 @@
 
 <div class="form-container">
     <h2>Nouvelle Tâche</h2>
-
+   
     <form method="post">
         <label for="titre">Titre de la tâche *</label>
         <input type="text" name="titre" placeholder="Ex: Faire les courses" required>
