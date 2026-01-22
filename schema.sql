@@ -1,8 +1,10 @@
-DROP TABLE IF EXISTS clients;
-CREATE TABLE clients (
+DROP TABLE IF EXISTS taches;
+
+CREATE TABLE taches (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    nom TEXT NOT NULL,
-    prenom TEXT NOT NULL,
-    adresse TEXT NOT NULL
+    titre TEXT NOT NULL,
+    description TEXT,
+    date_echeance TEXT,
+    est_terminee BOOLEAN DEFAULT 0
 );
