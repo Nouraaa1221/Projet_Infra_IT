@@ -9,7 +9,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
+# 1. Page d'accueil : Afficher les tâches [cite: 7, 13]
 @app.route('/')
 def index():
     conn = get_db_connection()
@@ -18,8 +18,7 @@ def index():
     conn.close()
     return render_template('index.html', taches=taches)
 
-
-
+# 2. Ajouter une tâche [cite: 6, 13]
 @app.route('/ajouter', methods=('GET', 'POST'))
 def ajouter():
     if request.method == 'POST':
@@ -36,10 +35,10 @@ def ajouter():
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
-
+           
     return render_template('ajouter.html')
 
-
+# 3. Supprimer une tâche
 @app.route('/supprimer/<int:id>', methods=('POST',))
 def supprimer(id):
     conn = get_db_connection()
@@ -49,7 +48,7 @@ def supprimer(id):
     flash('Tâche supprimée!')
     return redirect(url_for('index'))
 
-
+# 4. Marquer comme terminée
 @app.route('/terminer/<int:id>', methods=('POST',))
 def terminer(id):
     conn = get_db_connection()
@@ -59,5 +58,5 @@ def terminer(id):
     conn.close()
     return redirect(url_for('index'))
 
-if name == 'main':
+if __name__ == '__main__':
     app.run(debug=True)
